@@ -1,8 +1,7 @@
 #!/bin/sh
 
-while /sbin/setuser abc inotifywait -e modify /config/apache/site-confs/default.conf; do
+while /sbin/setuser abc inotifywait -r -e modify /config/apache/site-confs do
   sv down /etc/service/web/
   sv up /etc/service/web/
   echo "Default.conf changed, restarting"
-
 done
