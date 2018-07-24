@@ -9,15 +9,15 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 # copy sources.list
 COPY sources.list /etc/apt/
 
-ENV APTLIST="libapache2-mod-php5 wget inotify-tools php5-gd php5-sqlite php5-mcrypt php5-tidy php5-mysql libapache2-mod-proxy-html"
+ENV APTLIST="wget inotify-tools libapache2-mod-proxy-html"
 
 # install main packages
 RUN apt-get update -q && \
-apt-get install $APTLIST -qy && \
+    apt-get install $APTLIST -qy && \
 
-# cleanup
-apt-get clean -y && \
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    # cleanup
+    apt-get clean -y && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # add some files
 ADD services/ /etc/service/
