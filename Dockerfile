@@ -1,27 +1,12 @@
-FROM linuxserver/baseimage.apache
-MAINTAINER smdion <me@seandion.com>
-
-# set version label
-ARG BUILD_DATE
-ARG VERSION
-LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-
-# copy sources.list
-COPY sources.list /etc/apt/
-
-ENV APTLIST="wget inotify-tools libapache2-mod-proxy-html"
+FROM ubuntu:18.04
 
 # install main packages
-RUN apt-get update -q && \
-    apt-get install $APTLIST -qy && \
-
-    # cleanup
-    apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update -qq && \
+    apt-get install -qq -y apache2 inotify-tools
 
 # add some files
 ADD services/ /etc/service/
-RUN chmod -v +x /etc/service/*/run /etc/service/*/finish /etc/my_init.d/*.sh
+RUN chmod -v +x /etc/service/*/run /etc/service/*/finish
 
 # Update apache configuration with this one
 RUN a2enmod proxy proxy_http proxy_ajp rewrite deflate substitute headers proxy_balancer proxy_connect proxy_html proxy_wstunnel xml2enc authnz_ldap
