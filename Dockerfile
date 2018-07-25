@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 # install main packages
 RUN apt-get update -qq && \
-    apt-get install -qq -y apache2 inotify-tools
+    apt-get install -qy apache2 inotify-tools
 
 # add some files
 ADD services/ /etc/service/
@@ -14,3 +14,8 @@ RUN a2enmod proxy proxy_http proxy_ajp rewrite deflate substitute headers proxy_
 # ports and volumes
 EXPOSE 80 443
 VOLUME /config
+
+COPY apache.conf /etc/apache/apache2.conf
+
+CMD /etc/service/inotify/run
+# CMD /usr/sbin/apache2 -f /etc/apache/apache2.conf -DFOREGROUND
